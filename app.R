@@ -13,7 +13,7 @@ library(ape)
 library(dendextend)
 library(shinyBS)
 library(sortable)
-library(rjson) 
+library(rjson)
 
 
 ########################################################
@@ -26,20 +26,20 @@ User_folder <-paste(administrator_path,"User",'/',sep='');
 
 #All_species<-list.files(database_folder)
 
-source(paste(administrator_path,"script/Species.R",sep=''), local = TRUE); 
+source(paste(administrator_path,"script/Species.R",sep=''), local = TRUE);
 source(paste(administrator_path,"script/Page_species_info.R",sep=''), local = TRUE);
 
 ########################################################
 
 
-############################################################ Creating a navlink 
+############################################################ Creating a navlink
 nav_links <- tags$ul(
 
 
 flowLayout(
 
   tags$li(
-    tags$a(href = "/", "Main"), 
+    tags$a(href = "/", "Main"),
   ),
 
    tags$li(
@@ -69,7 +69,7 @@ page_0 <- function(){
         h1("Wellcome! This is TestShiny app main page",style="text-align:center"),
  #       h2("Subheading?"),
  #       h3("Subheading?"),
-   
+
 
         nav_links,
 
@@ -83,7 +83,7 @@ mainPanel(width = 6, helpText("Add some instructions here?")),
 
       ) # For tagList
     }, # For ui function of page_0
-    
+
 
 # To add server function part for page0
 
@@ -103,6 +103,7 @@ server <- function(input, output, session){
 
 } # Page_0 function
 
+###### test ###
 
 
 
@@ -115,7 +116,7 @@ server <- function(input, output, session){
   page_0(),
 
   Species("Wheat",database_folder,gff_folder,script_folder,User_folder)
- 
+
 #  for(sp in All_species){Species(sp,database_folder,gff_folder,script_folder,User_folder)}
 
 
@@ -123,6 +124,3 @@ server <- function(input, output, session){
 # To add many other pages
 
 )
-
-
-
