@@ -42,17 +42,17 @@ flowLayout(
     tags$a(href = "/", "Main"),
   ),
 
-   tags$li(
+  tags$li(
    tags$a(href = "/Wheat", "Wheat"),
   ),
 
 
 
-tags$style(
-"li a {font-size: 20px;font-weight: bold;}",
-)
+  tags$style(
+  "li a {font-size: 20px;font-weight: bold;}",
+  )
 
-)
+ )
 
 )
 
@@ -62,7 +62,6 @@ page_0 <- function(){
   page(
     href = "/",
 
-
     ui <-  function(request){
       tagList(
 
@@ -70,13 +69,11 @@ page_0 <- function(){
  #       h2("Subheading?"),
  #       h3("Subheading?"),
 
-
         nav_links,
 
 # To add ui part for page0
 
-
-mainPanel(width = 6, helpText("Add some instructions here?")),
+        mainPanel(width = 6, helpText("Add some instructions here?")),
 
 #verbatimTextOutput("info")
 
@@ -84,20 +81,15 @@ mainPanel(width = 6, helpText("Add some instructions here?")),
       ) # For tagList
     }, # For ui function of page_0
 
-
 # To add server function part for page0
 
-server <- function(input, output, session){
-
-
+   server <- function(input, output, session){
 
 #sometext<-c("References to be added here ???")
 
 #output$info <- renderText({ sometext })
 
-
     } # server function of Page_0
-
 
   ) # page for Page_0
 
@@ -118,7 +110,6 @@ server <- function(input, output, session){
   Species("Wheat",database_folder,gff_folder,script_folder,User_folder)
 
 #  for(sp in All_species){Species(sp,database_folder,gff_folder,script_folder,User_folder)}
-
 
 
 # To add many other pages
