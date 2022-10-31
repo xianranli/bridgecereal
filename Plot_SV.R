@@ -1,10 +1,6 @@
-
-
-
-
-Plot_SV <- function(genomes, g_lab, repmask, CDS_gDNA_blast, gDNAs_blast, N_Gap, Anno, variations,output_flag ) {
+Plot_SV <- function(genomes, g_lab, repmask, CDS_gDNA_blast, gDNAs_blast, N_Gap, Anno, output_flag,Gene,Ref_genome,haplotypes,repeats,strand_direction) {
 # if (output_flag == 1) {png(file = paste(Dir, Gene, '_NAM.png', sep = ''), width= 19 * .5, height= 12 * .75 , pointsize= 10 , units = "in", res = 600)};
- if (output_flag == 1) {png(file = paste(Dir, Gene, '_NAM.png', sep = ''), width= 8, height= 11 , pointsize= 10 , units = "in", res = 600)};
+ if (output_flag == 1) {png(file = paste(Dir, Gene, '.png', sep = ''), width= 8, height= 11 , pointsize= 10 , units = "in", res = 600)};
  
  par(mar = c(1.2, 1.0, 0, 0) , mgp = c(1, 0.1, 0), tck = -0.01, cex.axis = .9, cex.lab = 1, family = "mono"); ## ??
  
@@ -16,8 +12,23 @@ Plot_SV <- function(genomes, g_lab, repmask, CDS_gDNA_blast, gDNAs_blast, N_Gap,
 
 ## To add arrows and axis ##
   if (g == length(genomes)) { 
+
+Gene_Direction0<-read.table(paste(Gene, '_Haplotype_syn', sep = ''),header=T)
+Ref_genome_info <- Gene_Direction0[which(Gene_Direction0$Genome==Ref_genome),][1,]
+
+# if(Ref_genome_info[,7]-Ref_genome_info[,6]>0){
+
+ if(strand_direction=='+'){  
+
    arrows(range(gDNAs_blast[,9:10])[1], length(genomes)-0.5, range(gDNAs_blast[,9:10])[2], length(genomes)-0.5,lwd=2.5);
+
+   } else if(strand_direction=='-'){
+   
+   arrows(range(gDNAs_blast[,9:10])[2], length(genomes)-0.5, range(gDNAs_blast[,9:10])[1], length(genomes)-0.5, lwd=2.5);
+}
+     
      }
+
   if (g == length(genomes)) {
    axis(1, at = c(seq(from=range(gDNAs_blast[,9:10])[1],to=range(gDNAs_blast[,9:10])[2],by=(range(gDNAs_blast[,9:10])[2]-range(gDNAs_blast[,9:10])[1])/(10-1))),labels=paste0(c(ceiling(seq(from=range(gDNAs_blast[,9:10])[1],to=range(gDNAs_blast[,9:10])[2],by=(range(gDNAs_blast[,9:10])[2]-range(gDNAs_blast[,9:10])[1])/(10-1)))),'bp'),cex.axis=0.8,cex.lab=0.8,tick = TRUE,col = "blue", lty = 1, lwd = 2.5, lwd.ticks=1.5,tck =0.02,col.ticks = "black",col.axis = "black");
      }
@@ -53,36 +64,49 @@ Plot_SV <- function(genomes, g_lab, repmask, CDS_gDNA_blast, gDNAs_blast, N_Gap,
     }
    }
    
-    snp_v <- subset(variations, variations$Inbred == genomes[g] & variations$Type == 'snp');
-   if (nrow(snp_v) >= 1) {
-    segments(snp_v$Bp, rep(length(genomes) - g - 0.25, nrow(snp_v)), snp_v$Bp, rep(length(genomes) - g - 0.1, nrow(snp_v)), lwd = .01, col = "blue");
-   }
-   ins_v <- subset(variations, variations$Inbred == genomes[g] & variations$Type == 'ins');
-   if (nrow(ins_v) >= 1) {
-    points(ins_v$Bp, rep(length(genomes) - g - 0.1 , nrow(ins_v)) , pch = 25, bg = indel_col[ins_v$Size %%3 + 1], col = 1, cex = 0.6);
-    text(ins_v$Bp, rep(length(genomes) - g - 0.1 + 0.3, nrow(ins_v)), paste(ins_v$Size, 'bp', sep = ''), srt = 90, cex = .4)
-   }
-   ins_v <- subset(variations, variations$Inbred == genomes[g] & variations$Type == 'del');
-   if (nrow(ins_v) >= 1) {
-    points(ins_v$Bp, rep(length(genomes) - g - 0.25, nrow(ins_v)), pch = 24, bg = indel_col[ins_v$Size %%3 + 1], col = 1, cex = 0.6);
-    text(ins_v$Bp, rep(length(genomes) - g - 0.1 - 0.4, nrow(ins_v)), paste(ins_v$Size, 'bp', sep = ''), srt = 90, cex = .4)
-   }
+#    snp_v <- subset(variations, variations$Inbred == genomes[g] & variations$Type == 'snp');
+#   if (nrow(snp_v) >= 1) {
+#    segments(snp_v$Bp, rep(length(genomes) - g - 0.25, nrow(snp_v)), snp_v$Bp, rep(length(genomes) - g - 0.1, nrow(snp_v)), lwd = .01, col = "blue");
+#   }
+#   ins_v <- subset(variations, variations$Inbred == genomes[g] & variations$Type == 'ins');
+#   if (nrow(ins_v) >= 1) {
+#    points(ins_v$Bp, rep(length(genomes) - g - 0.1 , nrow(ins_v)) , pch = 25, bg = indel_col[ins_v$Size %%3 + 1], col = 1, cex = 0.6);
+#    text(ins_v$Bp, rep(length(genomes) - g - 0.1 + 0.3, nrow(ins_v)), paste(ins_v$Size, 'bp', sep = ''), srt = 90, cex = .4)
+#   }
+#   ins_v <- subset(variations, variations$Inbred == genomes[g] & variations$Type == 'del');
+#   if (nrow(ins_v) >= 1) {
+#    points(ins_v$Bp, rep(length(genomes) - g - 0.25, nrow(ins_v)), pch = 24, bg = indel_col[ins_v$Size %%3 + 1], col = 1, cex = 0.6);
+#    text(ins_v$Bp, rep(length(genomes) - g - 0.1 - 0.4, nrow(ins_v)), paste(ins_v$Size, 'bp', sep = ''), srt = 90, cex = .4)
+#   }
 
   self <- subset(gDNAs_blast,  gDNAs_blast[,1] == genomes[g] & gDNAs_blast[,2] == genomes[g ])
-  
   sizes <- round((max(self[,7:8]) - min(self[,7:8]) )/ 1000, 2);
+
+  if(haplotypes == 0){
  # legend(max(self[,7:8]),length(genomes) - g + 0.3, c(g_lab[g], paste('(', sizes, 'kb)', sep = '')), bty = "n", adj = c(0, 0), cex = .8 )
   legend(max(self[,7:8]),length(genomes) - g + 0.3, c(g_lab[g], paste('(', sizes, 'kb)', sep = '')), bty = "n", adj = c(0, 0), cex = .8 )
- 
-  gap <- subset(N_Gap, N_Gap[,1] == genomes[g]);
-  if (nrow(gap) > 0) {
-   segments(gap[,2], rep(length(genomes) - g - 0.025, nrow(gap)), gap[,3], rep(length(genomes) - g - 0.025, nrow(gap)), lty = 2, col = "black")
-  }
-  
+}
+
+  if(haplotypes == 1){
+
+ b_matrix_groups2 <- read.table("b_matrix_groups2.txt",header=T)
+ haplotypes0 <- subset(b_matrix_groups2,  b_matrix_groups2$genomes_rep == genomes[g]) ## 09/26/22
+ haplotypes1 <- haplotypes0$haplotypes_rep ## 09/26/22
+ legend(max(self[,7:8]),length(genomes) - g + 0.3, c(g_lab[g], paste('(', sizes, 'kb)',sep = ''), paste('(', haplotypes1, ' varieties)',sep = '') ), bty = "n", adj = c(0, 0), text.col = "blue", cex = 0.8 ) ## 09/26/22
+
+} 
+
    for (k in 1:nrow(self)) {
    if (self[k,7] == self[k,9] & self[k,8] == self[k,10]) {
     rect(self[k,7] - 100, length(genomes) - g, self[k,8] + 100, length(genomes) - g - 0.05, col = "darksalmon", border = "NA");
    } 
+ 
+  gap <- subset(N_Gap, N_Gap[,1] == genomes[g]);
+  if (nrow(gap) > 0) {
+   segments(gap[,2], rep(length(genomes) - g - 0.025, nrow(gap)), gap[,3], rep(length(genomes) - g - 0.025, nrow(gap)), lty = 2, lwd=3, col = "black")
+  }
+  
+
  #  else {
  #   mid <- mean(t(self[k,8:9]));
  #   polygon(c(self[k, 7], mid, self[k, 10], self[k,9], mid, self[k,8]), length(genomes) - g - c(0, -0.5, 0, 0, -0.45, 0), col = "purple", border = "NA")
@@ -109,6 +133,7 @@ Plot_SV <- function(genomes, g_lab, repmask, CDS_gDNA_blast, gDNAs_blast, N_Gap,
  #  text(mean(primers[k,9], primers[k,10]), length(genomes) - g - 0.175, primers[k,1])
  # }
 
+if(repeats==1){
 ## Repeats
    if (nrow(repmask) > 0) {
    g_repmask <- subset(repmask, repmask[,1] == genomes[g]);
@@ -121,6 +146,9 @@ Plot_SV <- function(genomes, g_lab, repmask, CDS_gDNA_blast, gDNAs_blast, N_Gap,
  #    if(nrow(g_repmask_L) > 0) {text(rowMeans(g_repmask_L[,7:8]), rep(g_rep_y + 0.3, nrow(g_repmask_L)), g_repmask_L[,2], cex = .6)}
    }
   }
+}
+
+
 
  }
 
